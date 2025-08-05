@@ -1,3 +1,4 @@
 # Node.js dependencies
 website/node_modules/
 website/dist
+website/index.html
