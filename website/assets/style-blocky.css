@@ -1,0 +1,227 @@
+/* Game/Counter-Strike style leaderboard enhancements */
+.game-leaderboard {
+    background: rgba(20, 20, 30, 0.92) !important;
+    border: 2px solid #ffe600;
+    border-radius: 8px;
+    box-shadow: 0 0 24px 2px #ffe60044, 0 2px 32px #000b;
+    font-family: 'VT323', 'Share Tech Mono', 'Orbitron', 'monospace', monospace !important;
+    font-size: 1em !important;
+    letter-spacing: 0.08em;
+    overflow: hidden;
+    position: relative;
+}
+.game-leaderboard thead th {
+    background: linear-gradient(90deg, #ffe600 0%, #ffe60044 100%);
+    color: #111;
+    text-shadow: 0 0 8px #ffe600, 0 0 2px #fff;
+    font-size: 1.1em;
+    border-bottom: 2px solid #ffe600;
+    font-family: inherit;
+}
+.game-leaderboard tbody tr {
+    border-bottom: 1px solid #ffe60033;
+    transition: background 0.2s;
+}
+.game-leaderboard tbody tr:hover {
+    background: #ffe60022;
+}
+.game-leaderboard .rank-1 {
+    background: linear-gradient(90deg, #ffe600 60%, #fffbe6 100%) !important;
+    color: #111 !important;
+    font-weight: bold;
+    text-shadow: 0 0 8px #ffe600, 0 0 2px #fff;
+    border-left: 4px solid #ffe600;
+}
+.game-leaderboard .rank-2 {
+    background: linear-gradient(90deg, #e0e0e0 60%, #f8f8f8 100%) !important;
+    color: #111 !important;
+    border-left: 4px solid #e0e0e0;
+}
+.game-leaderboard .rank-3 {
+    background: linear-gradient(90deg, #d1a97a 60%, #f5e6c6 100%) !important;
+    color: #111 !important;
+    border-left: 4px solid #d1a97a;
+}
+.game-leaderboard td, .game-leaderboard th {
+    border-radius: 0 !important;
+    vertical-align: middle;
+    padding: 0.7em 1em;
+    font-family: inherit;
+}
+.game-leaderboard .mono {
+    font-family: inherit;
+    font-size: 1em;
+    letter-spacing: 0.08em;
+}
+.game-leaderboard .has-text-right {
+    text-align: right;
+}
+.game-leaderboard .rank-1 td:first-child:before {
+    content: '\1F396'; /* Medal emoji */
+    margin-right: 0.4em;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+.game-leaderboard .rank-2 td:first-child:before {
+    content: '\1F948';
+    margin-right: 0.4em;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+.game-leaderboard .rank-3 td:first-child:before {
+    content: '\1F949';
+    margin-right: 0.4em;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+    background: #111;
+    font-family: 'VT323', 'Orbitron', 'Share Tech Mono', 'Arial', monospace;
+    color: #111;
+    font-size: 1.5em !important;
+    text-transform: uppercase !important;
+
+}
+
+/* Headings and titles: force uppercase and large font */
+h1, h2, h3, h4, h5, h6, .title {
+    font-size: 1.3em !important;
+    font-family: 'VT323', 'Orbitron', 'Share Tech Mono', 'Arial', monospace;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 2px #ffe600, 0 0 8px #ffe60044;
+    font-variant-ligatures: none;
+    font-weight: 400;
+    text-transform: uppercase !important;
+}
+
+
+
+.content-block, .highlight-yellow {
+    font-size: 1.1em !important;
+    text-transform: uppercase !important;
+}
+
+
+
+.shop-title, .shop-points {
+    font-size: 1.1em !important;
+    font-family: 'VT323', 'Orbitron', 'Share Tech Mono', 'Arial', monospace;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 2px #ffe600, 0 0 8px #ffe60044;
+    text-transform: uppercase !important;
+}
+
+.mono {
+    font-size: 1.1em !important;
+    text-transform: uppercase !important;
+}
+section.section, .hero, .footer {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.section{
+    padding:0;
+}
+
+/* White content blocks, horizontally shifted */
+.content-block {
+    background: #fff;
+    color: #111;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 2rem 0;
+    padding: 2rem;
+    width: 80%;
+    position: relative;
+}
+.content-block.shift-left {
+    left: -5vw;
+}
+.content-block.shift-right {
+    left: 5vw;
+}
+
+/* Remove border radius from all elements */
+* {
+    border-radius: 0 !important;
+}
+
+/* Highlighted yellow box for logo/text */
+.highlight-yellow {
+    background: #ffe600;
+    color: #111;
+    padding: 1rem 2rem;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+    box-shadow: none;
+}
+
+/* Table styles for digital look */
+table, .game-leaderboard {
+    text-transform: uppercase !important;
+    font-family: 'VT323', 'Orbitron', 'Share Tech Mono', 'Arial', monospace;
+    background: #fff;
+    color: #111;
+    border-radius: 0;
+    font-size: 1.1em;
+    letter-spacing: 0.07em;
+    box-shadow: none;
+    text-shadow: 0 0 2px #ffe600, 0 0 8px #ffe60044;
+    font-variant-ligatures: none;
+}
+th, td, .game-leaderboard th, .game-leaderboard td {
+    border-radius: 0 !important;
+    vertical-align: middle;
+}
+.game-leaderboard .mono {
+    font-family: 'VT323', 'Share Tech Mono', 'Orbitron', 'monospace', monospace;
+    font-size: 1.4em;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 2px #ffe600, 0 0 8px #ffe60044;
+}
+.game-leaderboard .has-text-right {
+    text-align: right;
+}
+.game-leaderboard .rank-1 {
+    background: #ffe600;
+    color: #111;
+    font-weight: bold;
+}
+.game-leaderboard .rank-2 {
+    background: #e0e0e0;
+    color: #111;
+}
+.game-leaderboard .rank-3 {
+    background: #d1a97a;
+    color: #111;
+}
+
+/* Remove Bulma's border radius from buttons, boxes, etc */
+.box, .button, .table, .columns, .column {
+    border-radius: 0 !important;
+}
+
+/* Footer on black */
+footer.footer {
+    background: #111;
+    color: #fff;
+}
+
+/* Social buttons in yellow/black */
+.button.is-link.is-light {
+    background: #ffe600;
+    color: #111;
+    border: none;
+    font-weight: bold;
+    box-shadow: none;
+}
+.button.is-link.is-light:hover {
+    background: #111;
+    color: #ffe600;
+}
