@@ -1,5 +1,9 @@
 <?php
 
+require_once __DIR__ . '/import-data.php';
+
+$importedData = loadLeaderboardData();
+
 
 
 
@@ -45,9 +49,9 @@ $shop_items = [
     
 
 
-
-
-            $leaderboard = [
+            
+            
+            $leaderboard = $importedData['leaderboard'] ?: [
                 ["rank" => 1, "medal" => "🥇", "ngo" => "Sea Rescue", "rescued" => 120, "points" => 120],
                 ["rank" => 2, "medal" => "🥈", "ngo" => "Open Arms", "rescued" => 95, "points" => 95],
                 ["rank" => 3, "medal" => "🥉", "ngo" => "ResQ", "rescued" => 80, "points" => 80],
