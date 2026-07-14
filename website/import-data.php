@@ -45,8 +45,10 @@ function loadLeaderboardData(): array
     $xpath = new DOMXPath($document);
     $xpath->registerNamespace('table', 'urn:oasis:names:tc:opendocument:xmlns:table:1.0');
     $xpath->registerNamespace('text', 'urn:oasis:names:tc:opendocument:xmlns:text:1.0');
+    $xpath->registerNamespace('office', 'urn:oasis:names:tc:opendocument:xmlns:office:1.0');
 
     $totals = [];
+    $monthlyTotals = [];
 
     foreach ($xpath->query('//table:table') as $sheet) {
         $sheetName = $sheet->getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:table:1.0', 'name');
@@ -58,6 +60,22 @@ function loadLeaderboardData(): array
             $values = extractOdsRowValues($xpath, $row, 6);
             if ($values === []) {
                 continue;
+            }
+
+            // Get ISO date from first cell's office:date-value attribute
+            $dateCells = $xpath->query('./table:table-cell[1]', $row);
+            $dateAttr = $dateCells->length > 0
+                ? $dateCells->item(0)->getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:office:1.0', 'date-value')
+                : '';
+
+            // Only count rescues from 2026-01-01 onwards (current season)
+            if ($dateAttr === '' || $dateAttr < '2026-01-01') {
+                continue;
+            }
+
+            $yearMonth = substr($dateAttr, 0, 7); // YYYY-MM
+            if (!isset($monthlyTotals[$yearMonth])) {
+                $monthlyTotals[$yearMonth] = [];
             }
 
             $date = trim((string) ($values[0] ?? ''));
@@ -82,11 +100,21 @@ function loadLeaderboardData(): array
                     'last_seen' => $date,
                 ];
             }
+            if (!isset($monthlyTotals[$yearMonth][$ngo])) {
+                $monthlyTotals[$yearMonth][$ngo] = [
+                    'ngo' => $ngo,
+                    'ngo_code' => $ngoCode,
+                    'rescued' => 0,
+                    'last_seen' => $date,
+                ];
+            }
 
             $totals[$ngo]['rescued'] += (int) $rescued;
+            $monthlyTotals[$yearMonth][$ngo]['rescued'] += (int) $rescued;
 
             if ($date !== '') {
                 $totals[$ngo]['last_seen'] = $date;
+                $monthlyTotals[$yearMonth][$ngo]['last_seen'] = $date;
             }
         }
     }
@@ -104,11 +132,14 @@ function loadLeaderboardData(): array
         $entry['rank'] = $index + 1;
         $entry['medal'] = $index === 0 ? '🥇' : ($index === 1 ? '🥈' : ($index === 2 ? '🥉' : ''));
         $entry['points'] = $entry['rescued'];
+        $entry['website'] = getNgoWebsite($entry['ngo']);
     }
     unset($entry);
 
     return [
         'leaderboard' => $leaderboard,
+        'monthlyTotals' => $monthlyTotals,
+        'availableMonths' => array_keys($monthlyTotals),
         'source' => $odsPath,
     ];
 }
@@ -167,6 +198,26 @@ function normalizeNgoName(string $ngo): string
     }
 
     return trim((string) $segments[0]);
+}
+
+function getNgoWebsite(string $ngo): string
+{
+    static $websites = [
+        'Ocean Viking'        => 'https://sosmediterranee.org',
+        'Sea-Watch 5'         => 'https://sea-watch.org',
+        'Sea-Eye 5'           => 'https://sea-eye.org',
+        'Sea-Eye 4'           => 'https://sea-eye.org',
+        'Humanity 1'          => 'https://sos-humanity.org',
+        'Louise Michel'       => 'https://mvlouisemichel.org/',
+        'Aita Mari'           => 'https://www.salvamentohumanitario.eu',
+        'Life Support'        => 'https://www.emergency.it',
+        'Italian Coast Guard' => 'https://www.guardiacostiera.gov.it',
+        'NADIR'               => 'https://resqship.org/',
+        'AURORA'              => 'https://sea-watch.org',
+        'SOLIDAIRE'           => 'https://solidaire.ong/',
+    ];
+
+    return $websites[$ngo] ?? '';
 }
 
 function displayNgoName(string $ngo): string

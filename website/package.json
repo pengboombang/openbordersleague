@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "A simple leaderboard website using Bulma and bundled with Vite.",
   "scripts": {
-    "dev": "vite",
+    "refresh:data": "rm -f index.html && php index.php > index.html",
+    "dev": "npm run refresh:data && vite",
     "build": "rm -f index.html && php index.php >> index.html && vite build && cp -R ./assets/product_pictures ./dist/assets/product_pictures",
-    "preview": "vite preview"
+    "preview": "npm run refresh:data && vite preview"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.0",

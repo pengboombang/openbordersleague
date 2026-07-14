@@ -1,12 +1,12 @@
 Sure — here is the full **concept paper** formatted in Markdown, without emojis or emoticons:
 
 ```markdown
-# Rescue Leaderboard  
+# Open Borders League  
 A counter-program to remigration fantasies
 
 ## Summary
 
-In a political climate increasingly dominated by far-right calls for “remigration” and militarized borders, this project offers a bold and ironic counter-narrative: the Rescue Leaderboard — a public, gamified rewards system for organizations that help people reach safety and claim their right to asylum.
+In a political climate increasingly dominated by far-right calls for “remigration” and militarized borders, this project offers a bold and ironic counter-narrative: the Open Borders League — a public, gamified rewards system for organizations that help people reach safety and claim their right to asylum.
 
 Inspired by Ukraine’s [Brave1](https://brave1.gov.ua/en/) initiative — where drone operators earn points redeemable for gear — we flip the script: not points for killing, but for rescuing. Every person supported in reaching safety earns points. These points are then redeemable for concrete tools like drones, radios, life jackets, or software — resources used to save even more lives.
 

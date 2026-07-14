@@ -4,8 +4,36 @@ require_once __DIR__ . '/import-data.php';
 
 $importedData = loadLeaderboardData();
 
+// Get all available months
+$availableMonths = $importedData['availableMonths'] ?? [];
+$defaultMonth = end($availableMonths) ?: null;
 
+// Prepare all monthly data for JavaScript
+$allMonthsData = [];
+foreach ($importedData['monthlyTotals'] ?? [] as $month => $monthData) {
+    $sorted = array_values($monthData);
+    usort($sorted, static function (array $left, array $right): int {
+        if ($left['rescued'] === $right['rescued']) {
+            return strcmp($left['ngo'], $right['ngo']);
+        }
+        return $right['rescued'] <=> $left['rescued'];
+    });
 
+    foreach ($sorted as $index => &$entry) {
+        $entry['rank'] = $index + 1;
+        $entry['medal'] = $index === 0 ? '🥇' : ($index === 1 ? '🥈' : ($index === 2 ? '🥉' : ''));
+        $entry['website'] = getNgoWebsite($entry['ngo']);
+    }
+    unset($entry);
+
+    $totalPoints = array_sum(array_column($sorted, 'rescued'));
+    $allMonthsData[$month] = [
+        'month' => $month,
+        'label' => date('F Y', strtotime($month . '-01')),
+        'data' => $sorted,
+        'total' => $totalPoints,
+    ];
+}
 
 // Example data arrays
 
@@ -51,19 +79,13 @@ $shop_items = [
 
             
             
-            $leaderboard = $importedData['leaderboard'] ?: [
-                ["rank" => 1, "medal" => "🥇", "ngo" => "Sea Rescue", "rescued" => 120, "points" => 120],
-                ["rank" => 2, "medal" => "🥈", "ngo" => "Open Arms", "rescued" => 95, "points" => 95],
-                ["rank" => 3, "medal" => "🥉", "ngo" => "ResQ", "rescued" => 80, "points" => 80],
-                ["rank" => 4, "medal" => "", "ngo" => "Solidarity Crew", "rescued" => 60, "points" => 60],
-            ];
 ?>
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Rescue Leaderboard</title>
+                <title>Open Borders League</title>
                 <!-- Styles are loaded via main.js (Vite bundle) -->
             </head>
             <body>
@@ -72,9 +94,9 @@ $shop_items = [
                 <section class="section">
                     <div class="container">
                         <div class="content-block shift-left" style="position:relative;">
-                            <span class="floating-title">Rescue Leaderboard<br><span style='font-size:0.7em;font-weight:normal;'>A counter-program to remigration fantasies</span></span>
+                            <span class="floating-title">Open Borders League<br><span style='font-size:0.7em;font-weight:normal;'>A counter-program to remigration fantasies</span></span>
                             <div style="margin-top:3.5em;">
-                                <p>In a political climate increasingly dominated by far-right calls for “remigration” and militarized borders, this project offers a bold and ironic counter-narrative: the Rescue Leaderboard — a public, gamified rewards system for organizations that help people reach safety and claim their right to asylum.</p>
+                                <p>In a political climate increasingly dominated by far-right calls for “remigration” and militarized borders, this project offers a bold and ironic counter-narrative: the Open Borders League — a public, gamified rewards system for organizations that help people reach safety and claim their right to asylum.</p>
                                 <p>Inspired by Ukraine’s <a href="https://brave1.gov.ua/en/" target="_blank">Brave1</a> initiative — where drone operators earn points redeemable for gear — we flip the script: not points for killing, but for rescuing. Every person supported in reaching safety earns points. These points are then redeemable for concrete tools like drones, radios, life jackets, or software — resources used to save even more lives.</p>
                                 <p>This is not charity. It’s a pragmatic and radically transparent mechanism to reward and empower those building an open society. If they can gamify deportation, we can gamify rescue.</p>
                             </div>
@@ -87,24 +109,54 @@ $shop_items = [
                     <div class="container">
                         <div class="content-block shift-right" style="position:relative;">
                             <span class="floating-title">Leaderboard</span>
-                            <p class="has-text-centered has-text-grey" style="margin-top:2.5em;">The game starts in August.</p>
+                            <p class="has-text-centered has-text-grey" style="margin-top:2.5em;">
+                                Season 2026 &middot; Game starts in June.
+                                <br><strong id="currentMonthLabel">Data for <?php echo $defaultMonth ? date('F Y', strtotime($defaultMonth . '-01')) : 'loading'; ?></strong>
+                            </p>
+                            
+                            <?php if (count($availableMonths) > 1): ?>
+                            <div class="tabs is-centered" style="margin:1em 0;">
+                                <ul id="monthTabs">
+                                    <?php foreach ($availableMonths as $month): 
+                                        $label = date('F Y', strtotime($month . '-01'));
+                                        $isDefault = $month === $defaultMonth ? ' is-active' : '';
+                                    ?>
+                                        <li class="<?php echo $isDefault; ?>" data-month="<?php echo htmlspecialchars($month); ?>">
+                                            <a onclick="window.selectMonth('<?php echo htmlspecialchars($month); ?>')"><?php echo htmlspecialchars($label); ?></a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            <?php endif; ?>
+
+                            <script type="application/json" id="monthlyDataJson">
+                            <?php echo json_encode($allMonthsData, JSON_PRETTY_PRINT); ?>
+                            </script>
+                            
                             <table class="table is-fullwidth game-leaderboard">
                                 <thead>
                                     <tr>
                                         <th style="width:40px;">#</th>
                                         <th>NGO</th>
-                                        <th class="has-text-right" style="width:120px;">People Rescued / Points</th>
+                                        <th class="has-text-right">Points</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php foreach ($leaderboard as $entry): ?>
-                                        <tr>
-                                            <td><?php echo $entry['rank']; ?></td>
-                                            <td><?php echo htmlspecialchars($entry['ngo']); ?></td>
-                                            <td class="mono has-text-right"><?php echo $entry['rescued']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                <tbody id="leaderboardBody">
+                                    <tr><td colspan="4" class="has-text-centered has-text-grey" style="padding:2em 0;">Loading...</td></tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr class="totals-row">
+                                        <td></td>
+                                        <td>Total Points</td>
+                                        <td class="mono has-text-right score-counter" id="totalPointsCell" data-score="0">0000</td>
+                                        <td>
+                                            <div class="status-bar status-bar-total" aria-label="Total points">
+                                                <span class="status-bar-fill" style="width: 100%;"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -186,7 +238,7 @@ $shop_items = [
                             <a href="https://instagram.com/peng.collective" target="_blank" class="button is-link is-light">Instagram</a>
                             <a href="https://pen.gg" target="_blank" class="button is-link is-light">Website</a>
                             <div style="margin-top:2em;font-size:0.95em;color:#111;">
-                                &copy; 2025 Rescue Leaderboard. Created by <a href="https://pen.gg" target="_blank">Peng Collective</a>.
+                                &copy; 2025 Open Borders League. Created by <a href="https://pen.gg" target="_blank">Peng Collective</a>.
                             </div>
                         </div>
                     </div>

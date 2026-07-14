@@ -360,3 +360,98 @@ footer.footer {
 	background: #111;
 	color: #ffe600;
 }
+
+/* Leaderboard layout overrides for full value visibility and progress bars */
+.game-leaderboard {
+	table-layout: auto;
+}
+
+.game-leaderboard th,
+.game-leaderboard td {
+	overflow: visible;
+	text-overflow: clip;
+	white-space: nowrap;
+	max-width: none;
+}
+
+.game-leaderboard th:nth-child(3),
+.game-leaderboard td:nth-child(3) {
+	min-width: 220px;
+}
+
+.game-leaderboard th:nth-child(4),
+.game-leaderboard td:nth-child(4) {
+	min-width: 140px;
+}
+
+.status-bar {
+	position: relative;
+	width: 100%;
+	height: 14px;
+	background: #2a2a2a;
+	border: 1px solid #555;
+	overflow: hidden;
+}
+
+.status-bar-fill {
+	display: block;
+	height: 100%;
+	background: linear-gradient(90deg, #ffe600 0%, #e5b800 100%);
+}
+
+.totals-row td {
+	font-weight: bold;
+	background: #202020;
+	border-top: 2px solid #444;
+}
+
+.status-bar-total .status-bar-fill {
+	background: linear-gradient(90deg, #fff07a 0%, #ffe600 100%);
+}
+
+/* Final leaderboard visibility/alignment overrides */
+.game-leaderboard {
+	table-layout: auto !important;
+	font-size: 1em !important;
+}
+
+.game-leaderboard th,
+.game-leaderboard td {
+	max-width: none !important;
+	overflow: visible !important;
+	text-overflow: clip !important;
+}
+
+.game-leaderboard thead th {
+	white-space: normal !important;
+	line-height: 1.15;
+	font-size: 0.85em !important;
+}
+
+.game-leaderboard tbody td,
+.game-leaderboard tfoot td {
+	white-space: nowrap !important;
+	font-size: 0.85em !important;
+}
+
+.game-leaderboard th:nth-child(3),
+.game-leaderboard td:nth-child(3) {
+	width: auto !important;
+	max-width: none !important;
+	min-width: 260px !important;
+}
+
+.game-leaderboard th:nth-child(4),
+.game-leaderboard td:nth-child(4),
+.game-leaderboard th:last-child,
+.game-leaderboard td:last-child {
+	width: auto !important;
+	max-width: none !important;
+	min-width: 180px !important;
+}
+
+.game-leaderboard thead th:nth-child(2),
+.game-leaderboard tbody td:nth-child(2),
+.game-leaderboard tfoot td:nth-child(2) {
+	text-align: left !important;
+}
