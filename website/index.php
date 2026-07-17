@@ -82,13 +82,22 @@ function getShopItemIconPath(string $itemName): string
     if (str_contains($name, 'ultrasound')) {
         return 'assets/icons-new/icons/ultrasound.png';
     }
-    if (str_contains($name, 'stethoscope') || str_contains($name, 'blood pressure') || str_contains($name, 'oximeter') || str_contains($name, 'first aid')) {
+    if (str_contains($name, 'blood pressure')) {
+        return 'assets/icons-new/icons/icon_blutdruck.png';
+    }
+    if (str_contains($name, 'stethoscope')) {
+        return 'assets/icons-new/icons/icon_arzt.png';
+    }
+    if (str_contains($name, 'oximeter') || str_contains($name, 'first aid')) {
         return 'assets/icons-new/icons/erstehilfe.png';
     }
     if (str_contains($name, 'hypothermia') || str_contains($name, 'blanket')) {
         return 'assets/icons-new/icons/rettungsdecke.png';
     }
-    if (str_contains($name, 'drone') || str_contains($name, 'night vision') || str_contains($name, 'distress signal')) {
+    if (str_contains($name, 'drone')) {
+        return 'assets/icons-new/icons/icon_drone.png';
+    }
+    if (str_contains($name, 'distress signal')) {
         return 'assets/icons-new/icons/signal.png';
     }
     if (str_contains($name, 'fire extinguisher')) {
@@ -109,8 +118,8 @@ function getShopItemIconPath(string $itemName): string
     if (str_contains($name, 'vhf') || str_contains($name, 'radio')) {
         return 'assets/icons-new/icons/radio.png';
     }
-    if (str_contains($name, 'binocular')) {
-        return 'assets/icons-new/icons/fernglas.png';
+    if (str_contains($name, 'binocular') || str_contains($name, 'night vision')) {
+        return 'assets/icons-new/icons/icon_fernrohr.png';
     }
     if (str_contains($name, 'water purification')) {
         return 'assets/icons-new/icons/watersystem.png';
@@ -121,7 +130,16 @@ function getShopItemIconPath(string $itemName): string
     if (str_contains($name, 'food')) {
         return 'assets/icons-new/icons/food.png';
     }
-    if (str_contains($name, 'oars') || str_contains($name, 'paddles') || str_contains($name, 'repair') || str_contains($name, 'valve') || str_contains($name, 'pump') || str_contains($name, 'boat')) {
+    if (str_contains($name, 'pump')) {
+        return 'assets/icons-new/icons/icon_pumpe.png';
+    }
+    if (str_contains($name, 'repair') || str_contains($name, 'kleber')) {
+        return 'assets/icons-new/icons/icon_Kleber.png';
+    }
+    if (str_contains($name, 'valve') || str_contains($name, 'tool') || str_contains($name, 'werkzeug')) {
+        return 'assets/icons-new/icons/icon_werkzeug.png';
+    }
+    if (str_contains($name, 'oars') || str_contains($name, 'paddles') || str_contains($name, 'boat')) {
         return 'assets/icons-new/icons/Boat.png';
     }
 
@@ -227,6 +245,7 @@ function getShopItemIconPath(string $itemName): string
                                     </tr>
                                 </tfoot>
                             </table>
+                            <p class="leaderboard-community-note">We do not only support sea rescue organizations. If you know other organizations that have helped people on the move and should appear on the scoreboard, please write to us.</p>
                         </div>
                     </div>
                 </section>
@@ -236,19 +255,32 @@ function getShopItemIconPath(string $itemName): string
                     <div class="container">
                         <div class="content-block shift-left" style="position:relative;">
                             <span class="floating-title">Rescue Market</span>
-                            <div class="columns is-multiline" style="margin-top:2.5em;">
+                            <div class="inventory-header" style="margin-top:2.5em;">
+                                <span class="inventory-badge">Inventory</span>
+                                <span class="inventory-badge inventory-badge-ghost">Unlocked Gear</span>
+                            </div>
+                            <div class="columns is-multiline inventory-grid" style="margin-top:1rem;">
                                 <?php foreach ($shop_items as $item): ?>
                                 <?php
                                     $iconPath = getShopItemIconPath($item['name']);
                                 ?>
-                                <div class="column is-one-third">
+                                <div class="column is-full-mobile is-half-tablet is-one-quarter-desktop">
                                     <div class="box has-text-centered shop-item-card">
+                                        <span class="inventory-item-class">Rescue Gear</span>
                                         <img src="./<?php echo htmlspecialchars($iconPath); ?>" alt="Icon for <?php echo htmlspecialchars($item['name']); ?>" class="shop-img shop-img-icon" />
                                         <h3 class="title is-5 shop-item-title"><?php echo htmlspecialchars($item['name']); ?></h3>
                                         <p class="shop-item-points">Redeem for <?php echo $item['points']; ?> points</p>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                <div class="column is-full-mobile is-half-tablet is-one-quarter-desktop">
+                                    <div class="box has-text-centered shop-item-card shop-item-card-help">
+                                        <span class="inventory-item-class">Support</span>
+                                        <div class="shop-help-icon" aria-hidden="true">?</div>
+                                        <h3 class="title is-5 shop-item-title">Item missing?</h3>
+                                        <p class="shop-item-points">Contact the game devs and tell us what should be added.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

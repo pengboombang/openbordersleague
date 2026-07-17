@@ -31,7 +31,7 @@ a {
 
 .section {
   background: transparent;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
 .section:first-of-type {
@@ -41,7 +41,7 @@ a {
 .content-block {
   background: var(--card-bg);
   border: 2px solid var(--panel-border);
-  margin: 0.7rem 0;
+  margin: 0.35rem 0;
   padding: 2rem 2rem 1.8rem;
   position: relative;
   width: min(90%, 1180px);
@@ -268,6 +268,17 @@ h6 {
   border-top: 2px solid #444;
 }
 
+.leaderboard-community-note {
+  margin: 1rem 0 0;
+  padding: 0.65rem 0.8rem;
+  border: 1px dashed #3d3d3d;
+  background: #f0f0eb;
+  color: #202020;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  text-transform: none;
+}
+
 .status-bar-total .status-bar-fill {
   background: linear-gradient(90deg, #fff07a 0%, var(--poster-yellow) 100%);
 }
@@ -280,57 +291,146 @@ h6 {
   display: flex;
 }
 
+.inventory-header {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inventory-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.22rem 0.58rem;
+  border: 1px solid #181818;
+  background: var(--poster-yellow);
+  color: #151515;
+  font-family: 'Chakra Petch', 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.inventory-badge-ghost {
+  background: #f3f3f3;
+}
+
+.inventory-grid {
+  margin-left: -0.4rem;
+  margin-right: -0.4rem;
+}
+
+.inventory-grid.columns.is-multiline > .column {
+  padding: 0.4rem;
+}
+
 .shop-item-card {
   width: 100%;
-  border: 2px solid #252525;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
+  border: 2px solid #202020;
+  background: linear-gradient(180deg, #fbfbf6 0%, #eeeee9 100%);
+  display: grid;
+  grid-template-rows: auto 108px 72px auto;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 298px;
-  padding: 1rem 0.9rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  justify-items: center;
+  min-height: 320px;
+  padding: 0.72rem 0.72rem 0.78rem;
+  row-gap: 0.45rem;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  box-shadow: inset 0 0 0 1px #d4d4cc;
+  position: relative;
+  overflow: hidden;
 }
 
 .shop-item-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  border-color: #000;
+  box-shadow: inset 0 0 0 1px #000, 0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.inventory-item-class {
+  justify-self: start;
+  align-self: start;
+  margin: 0;
+  background: #171717;
+  color: #fff9cc;
+  border: 1px solid #000;
+  padding: 0.14rem 0.45rem;
+  font-family: 'Chakra Petch', 'Space Grotesk', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .shop-img {
-  width: 84px;
-  height: 84px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
-  border: 2px solid var(--poster-yellow);
-  margin-bottom: 0.7rem;
-  background: #f0f0f0;
-  padding: 0.2rem;
+  border: 2px solid #1f1f1f;
+  margin: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #efefef 100%);
+  padding: 0.28rem;
+  box-shadow: inset 0 0 0 1px #d8d8d8;
 }
 
 .shop-img-icon {
-  background: #f5f5f5;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
 }
 
 .shop-item-title {
-  font-size: 1rem !important;
-  line-height: 1.25;
-  margin-bottom: 0.48rem !important;
+  font-size: 0.95rem !important;
+  line-height: 1.2;
+  margin: 0 !important;
+  min-height: 2.4em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   text-transform: none !important;
-  text-wrap: balance;
+  overflow: hidden;
 }
 
 .shop-item-points {
-  margin-top: auto;
-  margin-bottom: 0 !important;
-  padding: 0.15rem 0.55rem;
-  background: var(--poster-yellow);
-  color: #161616;
+  margin: 0 !important;
+  align-self: end;
+  width: 100%;
+  padding: 0.28rem 0.55rem;
+  background: #141414;
+  border: 1px solid #000;
+  color: var(--poster-yellow);
   font-family: 'Chakra Petch', 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 0.86rem;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
+}
+
+.content-block .shop-item-points {
+  color: var(--poster-yellow);
+}
+
+.shop-item-card-help {
+  background: linear-gradient(180deg, #f7f7f2 0%, #e8e8df 100%);
+}
+
+.shop-help-icon {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #1f1f1f;
+  background: linear-gradient(180deg, #fff07a 0%, var(--poster-yellow) 100%);
+  color: #111;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 3rem;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px #d8c500;
 }
 
 .faq-item {
@@ -439,7 +539,7 @@ h6 {
 
   .content-block {
     width: calc(100% - 2rem);
-    margin: 0.9rem auto;
+    margin: 0.45rem auto;
     padding: 1.45rem 1.1rem;
   }
 
@@ -472,6 +572,24 @@ h6 {
   .game-leaderboard th:nth-child(4),
   .game-leaderboard td:nth-child(4) {
     width: 40%;
+  }
+
+  .inventory-grid {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .inventory-grid.columns.is-multiline > .column {
+    padding: 0.35rem 0;
+  }
+
+  .shop-item-card {
+    grid-template-rows: auto 102px 70px auto;
+    min-height: 300px;
+  }
+
+  .shop-item-title {
+    min-height: 2.3em;
   }
 
   .floating-donate-btn,
