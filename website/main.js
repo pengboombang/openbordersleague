@@ -5,11 +5,15 @@ import 'bulma/css/bulma.min.css';
 document.addEventListener('DOMContentLoaded', function () {
     const dataScript = document.getElementById('monthlyDataJson');
     const monthlyData = dataScript ? JSON.parse(dataScript.textContent) : {};
-    let currentMonth = Object.keys(monthlyData)[Object.keys(monthlyData).length - 1] || null;
+    const initialActiveTab = document.querySelector('#monthTabs li.is-active');
+    let currentMonth = initialActiveTab
+        ? initialActiveTab.dataset.month
+        : (Object.keys(monthlyData).find(month => !monthlyData[month]?.locked) || null);
 
     // Function to render the leaderboard for a specific month
     window.selectMonth = function(month) {
         if (!monthlyData[month]) return;
+        if (monthlyData[month].locked) return;
         
         currentMonth = month;
         const monthInfo = monthlyData[month];
@@ -38,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const barPercent = maxScore > 0 ? Math.round((entry.rescued / maxScore) * 100) : 0;
                 const pointsPadded = String(entry.rescued).padStart(4, '0');
                 const ngoLink = entry.website 
-                    ? `<a href="${entry.website}" target="_blank" rel="noopener noreferrer">${entry.ngo}</a>`
-                    : entry.ngo;
+                    ? `<a class="ngo-link" href="${entry.website}" target="_blank" rel="noopener noreferrer">${entry.ngo}</a>`
+                    : `<span class="ngo-name">${entry.ngo}</span>`;
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -70,6 +74,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentMonth) {
         window.selectMonth(currentMonth);
     }
+
+    // FAQ accordion: only one open at a time for cleaner scanning.
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (!question) return;
+
+        question.addEventListener('click', () => {
+            const willOpen = !item.classList.contains('is-open');
+
+            faqItems.forEach(other => {
+                other.classList.remove('is-open');
+            });
+
+            if (willOpen) {
+                item.classList.add('is-open');
+            }
+        });
+    });
 });
 
 // Slot-machine score animation
