@@ -4,42 +4,22 @@ require_once __DIR__ . '/import-data.php';
 
 $importedData = loadLeaderboardData();
 
-// Season timeline: always show May through August 2026
-$seasonMonths = ['2026-05', '2026-06', '2026-07', '2026-08'];
-$lockedMonths = ['2026-06', '2026-07', '2026-08'];
-$availableMonths = $seasonMonths;
-
-// Start leaderboard with the first season month for clear chronological flow.
-$defaultMonth = $seasonMonths[0] ?? null;
-
-// Prepare all monthly data for JavaScript
-$allMonthsData = [];
-foreach ($seasonMonths as $month) {
-    $monthData = $importedData['monthlyTotals'][$month] ?? [];
-    $sorted = array_values($monthData);
-    usort($sorted, static function (array $left, array $right): int {
-        if ($left['rescued'] === $right['rescued']) {
-            return strcmp($left['ngo'], $right['ngo']);
-        }
-        return $right['rescued'] <=> $left['rescued'];
-    });
-
-    foreach ($sorted as $index => &$entry) {
-        $entry['rank'] = $index + 1;
-        $entry['medal'] = $index === 0 ? '🥇' : ($index === 1 ? '🥈' : ($index === 2 ? '🥉' : ''));
-        $entry['website'] = getNgoWebsite($entry['ngo']);
-    }
-    unset($entry);
-
-    $totalPoints = array_sum(array_column($sorted, 'rescued'));
-    $allMonthsData[$month] = [
-        'month' => $month,
-        'label' => date('F Y', strtotime($month . '-01')),
-        'data' => $sorted,
-        'total' => $totalPoints,
-        'locked' => in_array($month, $lockedMonths, true),
-    ];
+$leaderboardEntries = $importedData['leaderboard'] ?? [];
+foreach ($leaderboardEntries as &$entry) {
+    $entry['points'] = (int) ($entry['rescued'] ?? 0);
+    $entry['points_redeemed'] = 0;
 }
+unset($entry);
+
+$totalLeaguePoints = array_sum(array_column($leaderboardEntries, 'points'));
+$leaderboardPayload = [
+    'season_start_label' => '01.01.2026',
+    'available_points' => 5000,
+    'available_points_note' => '5000 points have been sponsored by Peng and Bavaria.',
+    'total_points' => $totalLeaguePoints,
+    'total_redeemed' => 0,
+    'data' => $leaderboardEntries,
+];
 
 // Example data arrays
 
@@ -187,37 +167,23 @@ function getShopItemIconPath(string $itemName): string
                         <div class="content-block shift-right" style="position:relative;">
                             <span class="floating-title">Leaderboard</span>
                             <p class="has-text-centered has-text-grey season-summary" style="margin-top:2.5em;">
-                                <span class="summary-label">Season 2026 Timeline:</span> May to August (chronological)
-                                <br><span class="summary-label">Leaderboard Month:</span> <strong id="currentMonthLabel">Data for <?php echo $defaultMonth ? date('F Y', strtotime($defaultMonth . '-01')) : 'loading'; ?></strong>
+                                <span class="summary-label">Counted rescues:</span> cumulative totals since <strong>01.01.2026</strong>
+                                <br>This leaderboard shows the cumulative total of every recorded rescue since the start of 2026.
                             </p>
-                            
-                            <div class="tabs is-centered" style="margin:1em 0;">
-                                <ul id="monthTabs">
-                                    <?php foreach ($availableMonths as $month): 
-                                        $label = date('F Y', strtotime($month . '-01'));
-                                        $isLocked = in_array($month, $lockedMonths, true);
-                                        $classes = [];
-                                        if ($month === $defaultMonth && !$isLocked) {
-                                            $classes[] = 'is-active';
-                                        }
-                                        if ($isLocked) {
-                                            $classes[] = 'is-disabled';
-                                        }
-                                        $className = implode(' ', $classes);
-                                    ?>
-                                        <li class="<?php echo htmlspecialchars($className); ?>" data-month="<?php echo htmlspecialchars($month); ?>">
-                                            <?php if ($isLocked): ?>
-                                                <a class="month-tab-disabled" aria-disabled="true"><?php echo htmlspecialchars($label); ?></a>
-                                            <?php else: ?>
-                                                <a onclick="window.selectMonth('<?php echo htmlspecialchars($month); ?>')"><?php echo htmlspecialchars($label); ?></a>
-                                            <?php endif; ?>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
+
+                            <div class="points-availability-bar" aria-label="Sponsored points available">
+                                <div class="points-availability-header">
+                                    <span class="points-availability-label">Points available (*)</span>
+                                    <span class="points-availability-total mono">5000</span>
+                                </div>
+                                <div class="status-bar status-bar-sponsored" aria-hidden="true">
+                                    <span class="status-bar-fill" style="width: 100%;"></span>
+                                </div>
+                                <p class="points-availability-note">(*) <?php echo htmlspecialchars($leaderboardPayload['available_points_note']); ?></p>
                             </div>
 
-                            <script type="application/json" id="monthlyDataJson">
-                            <?php echo json_encode($allMonthsData, JSON_PRETTY_PRINT); ?>
+                            <script type="application/json" id="leaderboardDataJson">
+                            <?php echo json_encode($leaderboardPayload, JSON_PRETTY_PRINT); ?>
                             </script>
                             
                             <table class="table is-fullwidth game-leaderboard">
@@ -226,17 +192,19 @@ function getShopItemIconPath(string $itemName): string
                                         <th style="width:40px;">#</th>
                                         <th>NGO</th>
                                         <th class="has-text-right">Points</th>
+                                        <th class="has-text-right">Points Redeemed</th>
                                         <th>Rescue Progress</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody">
-                                    <tr><td colspan="4" class="has-text-centered has-text-grey" style="padding:2em 0;">Loading...</td></tr>
+                                    <tr><td colspan="5" class="has-text-centered has-text-grey" style="padding:2em 0;">Loading...</td></tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="totals-row">
                                         <td></td>
                                         <td>Total League Points</td>
                                         <td class="mono has-text-right score-counter" id="totalPointsCell" data-score="0">0000</td>
+                                        <td class="mono has-text-right score-counter" id="totalRedeemedCell" data-score="0">0000</td>
                                         <td>
                                             <div class="status-bar status-bar-total" aria-label="Total points">
                                                 <span class="status-bar-fill" style="width: 100%;"></span>
@@ -276,7 +244,7 @@ function getShopItemIconPath(string $itemName): string
                                 <div class="column is-full-mobile is-half-tablet is-one-quarter-desktop">
                                     <div class="box has-text-centered shop-item-card shop-item-card-help">
                                         <span class="inventory-item-class">Support</span>
-                                        <div class="shop-help-icon" aria-hidden="true">?</div>
+                                        <div class="shop-help-icon" aria-hidden="true"></div>
                                         <h3 class="title is-5 shop-item-title">Item missing?</h3>
                                         <p class="shop-item-points">Contact the game devs and tell us what should be added.</p>
                                     </div>
@@ -382,14 +350,27 @@ function getShopItemIconPath(string $itemName): string
                 <!-- Social Media Links & Footer in last box -->
                 <section class="section">
                     <div class="container has-text-centered">
-                        <div class="content-block shift-left">
+                        <div class="content-block shift-left footer-partners-block">
                             <h2 class="title is-5">Follow Us</h2>
-                            <a href="https://twitter.com/pengcollective" target="_blank" class="button is-link is-light">Twitter</a>
-                            <a href="https://instagram.com/peng.collective" target="_blank" class="button is-link is-light">Instagram</a>
-                            <a href="https://pen.gg" target="_blank" class="button is-link is-light">Website</a>
-                            <div style="margin-top:2em;font-size:0.95em;color:#111;">
-                                &copy; 2025 Open Borders League. Created by <a href="https://pen.gg" target="_blank">Peng Collective</a>.
+                            <div class="footer-social-links">
+                                <a href="https://twitter.com/pengcollective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Twitter</a>
+                                <a href="https://instagram.com/peng.collective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Instagram</a>
+                                <a href="https://pen.gg" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Website</a>
                             </div>
+
+                            <div class="cooperation-partners" aria-label="Cooperation partners">
+                                <p class="dream-illegal-note">Part of <a href="http://www.dreamillegal.org/" target="_blank" rel="noopener noreferrer">Dream Illegal</a></p>
+                                <div class="partners-grid">
+                                    <a class="partner-logo-link" href="https://www.stmwk.bayern.de/" target="_blank" rel="noopener noreferrer" aria-label="Bayerisches Staatsministerium fur Wissenschaft und Kunst">
+                                        <img class="partner-logo partner-logo-stmwk" src="./assets/partners/stmwk-logo@2x.png" alt="Bayerisches Staatsministerium fur Wissenschaft und Kunst" loading="lazy" />
+                                    </a>
+                                    <a class="partner-logo-link" href="https://www.bbk-bayern.de/programme/verbindungslinien" target="_blank" rel="noopener noreferrer" aria-label="BBK Verbindungslinien">
+                                        <img class="partner-logo partner-logo-bbk" src="./assets/partners/bbk-verbindungslinien@2x.jpg" alt="BBK Verbindungslinien" loading="lazy" />
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="footer-credit">&copy; 2026 Open Borders League. Created by <a href="https://pen.gg" target="_blank" rel="noopener noreferrer">Peng Collective</a>.</p>
                         </div>
                     </div>
                 </section>
