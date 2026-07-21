@@ -366,7 +366,7 @@ function getShopItemIconPath(string $itemName): string
                         <div class="content-block shift-left footer-partners-block">
                             <h2 class="title is-5">Follow Us</h2>
                             <div class="footer-social-links">
-                                <a href="https://x.com/peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">X</a>
+                                <a href="https://cancelx.com/peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">X</a>
                                 <a href="https://www.instagram.com/pengcollective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Instagram</a>
                                 <a href="http://tldr.nettime.org/@peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Mastodon</a>
                                 <a href="https://pen.gg" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Website</a>
