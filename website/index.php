@@ -21,6 +21,8 @@ $leaderboardPayload = [
     'data' => $leaderboardEntries,
 ];
 
+$contactFormUrl = 'https://ucs.pen.gg/nextcloud/apps/forms/s/9fNwRxfTyRyps9NzbC5Xco4w';
+
 // Example data arrays
 
 $shop_items = [
@@ -250,7 +252,7 @@ function getShopItemIconPath(string $itemName): string
                                         <span class="inventory-item-class">Rescue Gear</span>
                                         <img src="./<?php echo htmlspecialchars($iconPath); ?>" alt="Icon for <?php echo htmlspecialchars($item['name']); ?>" class="shop-img shop-img-icon" />
                                         <h3 class="title is-5 shop-item-title"><?php echo htmlspecialchars($item['name']); ?></h3>
-                                        <p class="shop-item-points">Redeem for <?php echo $item['points']; ?> points</p>
+                                        <a class="shop-item-points" href="<?php echo htmlspecialchars($contactFormUrl); ?>" target="_blank" rel="noopener noreferrer">Redeem for <?php echo $item['points']; ?> points</a>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -366,7 +368,7 @@ function getShopItemIconPath(string $itemName): string
                         <div class="content-block shift-left footer-partners-block">
                             <h2 class="title is-5">Follow Us</h2>
                             <div class="footer-social-links">
-                                <a href="https://cancelx.com/peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">X</a>
+                                <a href="https://xcancel.com/peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">xcancel</a>
                                 <a href="https://www.instagram.com/pengcollective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Instagram</a>
                                 <a href="http://tldr.nettime.org/@peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Mastodon</a>
                                 <a href="https://pen.gg" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Website</a>
