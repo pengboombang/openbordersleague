@@ -156,6 +156,19 @@ function getShopItemIconPath(string $itemName): string
                                 <p>In a political climate increasingly dominated by far-right calls for “remigration” and militarized borders, this project offers a bold and ironic counter-narrative: the Open Borders League — a public, gamified rewards system for organizations that help people reach safety and claim their right to asylum.</p>
                                 <p>Inspired by Ukraine’s <a href="https://brave1.gov.ua/en/" target="_blank" rel="noopener noreferrer" class="poster-link">BRAVE1</a> initiative — where drone operators earn points redeemable for gear — we flip the script: not points for killing, but for rescuing. Every person supported in reaching safety earns points. These points are then redeemable for concrete tools like drones, radios, life jackets, or software — resources used to save even more lives.</p>
                                 <p>This is not charity. It’s a pragmatic and radically transparent mechanism to reward and empower those building an open society. If they can gamify deportation, we can gamify rescue.</p>
+                                <div style="margin-top:1.5rem; aspect-ratio:16 / 9; width:100%;">
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        src="https://www.youtube.com/embed/Y_rN6JKyQ64"
+                                        title="Open Borders League video"
+                                        loading="lazy"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin"
+                                        allowfullscreen
+                                        style="border:0; border-radius:8px;"
+                                    ></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -353,8 +366,9 @@ function getShopItemIconPath(string $itemName): string
                         <div class="content-block shift-left footer-partners-block">
                             <h2 class="title is-5">Follow Us</h2>
                             <div class="footer-social-links">
-                                <a href="https://twitter.com/pengcollective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Twitter</a>
-                                <a href="https://instagram.com/peng.collective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Instagram</a>
+                                <a href="https://x.com/peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">X</a>
+                                <a href="https://www.instagram.com/pengcollective" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Instagram</a>
+                                <a href="http://tldr.nettime.org/@peng" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Mastodon</a>
                                 <a href="https://pen.gg" target="_blank" rel="noopener noreferrer" class="button is-link is-light">Website</a>
                             </div>
 
