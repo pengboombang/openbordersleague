@@ -376,7 +376,7 @@ function getShopItemIconPath(string $itemName): string
                 </section>
 
                 <!-- Remove separate footer -->
-                <button class="floating-donate-btn" onclick="window.open('https://your-donation-link.com', '_blank')">Donate Points</button>
+                <button class="floating-donate-btn" onclick="window.open('https://pen.gg/support/', '_blank')">Donate Points</button>
                 <button class="floating-contact-btn" onclick="window.open('https://ucs.pen.gg/nextcloud/apps/forms/s/9fNwRxfTyRyps9NzbC5Xco4w', '_blank')">Contact</button>
                 <script type="module" src="/main.js"></script>
             </body>
